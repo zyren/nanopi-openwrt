@@ -74,6 +74,7 @@ jobs:
           CONFIG_OPENSSL_WITH_EC2M=y
           CONFIG_OPENSSL_WITH_NPN=y
           CONFIG_PACKAGE_htop=y
+          # CONFIG_PACKAGE_luci-app-cpufreq is not set
           CONFIG_PACKAGE_luci-app-frps=y
           CONFIG_PACKAGE_luci-app-netdata=y
           CONFIG_LIBSODIUM_MINIMAL=y
