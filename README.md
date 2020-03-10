@@ -1,7 +1,17 @@
-## Nanopi r1s(h5) r2s openwrt 固件自动编译
+感谢Klever1998大神制作的R2S整合固件，实测非常稳定可靠
+本项目Fork来源：https://github.com/klever1988/nanopi-openwrt
+
+在Klever1998大神的基础上，去掉了helloworld，增加了luci-app-ttyd
 
 ### 发布地址：
+https://github.com/zyren/nanopi-openwrt/releases
+(请记得下载zip包之后解压出里头的固件包再刷，不要拿zip直刷，会失败的！)
 
+以下内容源自Klever1998大神的项目：https://github.com/klever1988/nanopi-openwrt
+
+## Nanopi r2s openwrt 固件自动编译
+
+### 发布地址：
 https://github.com/klever1988/nanopi-openwrt/releases
 
 (请记得下载zip包之后解压出里头的固件包再刷，不要拿zip直刷，会失败的！)
