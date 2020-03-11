@@ -2,8 +2,6 @@
 
 本项目Fork来源：https://github.com/klever1988/nanopi-openwrt
 
-在Klever1998大神的基础上，去掉了helloworld，增加了luci-app-ttyd
-
 ### 发布地址：
 
 https://github.com/zyren/nanopi-openwrt/releases
