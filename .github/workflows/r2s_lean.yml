@@ -1,4 +1,4 @@
-# 2020-3-13 11:13编译
+# 2020-3-13 21:18编译
 
 name: r2s Lean版openwrt
 
@@ -10,6 +10,9 @@ on:
       - '.github/workflows/r2s_lean.yml'
   #schedule:
   #  - cron: '10 09 * * *'
+env:
+  TZ: Asia/Shanghai
+
 
 jobs:
 
