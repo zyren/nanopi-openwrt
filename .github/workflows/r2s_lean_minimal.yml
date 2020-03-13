@@ -76,7 +76,7 @@ jobs:
           CONFIG_PACKAGE_htop=y
           # CONFIG_PACKAGE_luci-app-cpufreq is not set
           # CONFIG_PACKAGE_luci-app-frps= is not set
-          CONFIG_PACKAGE_luci-app-netdata=y
+          # CONFIG_PACKAGE_luci-app-netdata is not set
           CONFIG_LIBSODIUM_MINIMAL=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_DNS2SOCKS=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Redsocks2=y
@@ -85,7 +85,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y
-          CONFIG_PACKAGE_luci-app-ssrserver-python=y
+          # CONFIG_PACKAGE_luci-app-ssrserver-python is not set
           CONFIG_PACKAGE_luci-app-ttyd=y
           CONFIG_PACKAGE_luci-app-uhttpd=y
           CONFIG_PACKAGE_luci-app-unblockmusic=y
