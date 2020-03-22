@@ -63,7 +63,6 @@ CONFIG_PACKAGE_luci-app-v2ray-server=y
 #CONFIG_PACKAGE_luci-app-vssr is not set
 #CONFIG_PACKAGE_luci-app-vssr_INCLUDE_Trojan is not set
 #CONFIG_PACKAGE_luci-app-vssr_INCLUDE_V2ray is not set
-# CONFIG_PACKAGE_luci-app-watchcat is not set
 #CONFIG_PACKAGE_luci-theme-argon is not set
 CONFIG_PACKAGE_luci-theme-material=y
 #CONFIG_PACKAGE_luci-theme-netgear is not set
@@ -81,6 +80,11 @@ CONFIG_PACKAGE_luci-theme-freifunk-generic=y
 CONFIG_PACKAGE_luci-theme-material=y
 #CONFIG_PACKAGE_luci-theme-netgear-mc is not set
 CONFIG_PACKAGE_luci-theme-openwrt=y
+
+CONFIG_PACKAGE_pv=y
+CONFIG_PACKAGE_pigz=y
+CONFIG_PACKAGE_unzip=y
+CONFIG_PACKAGE_losetup=y
 
 CONFIG_PACKAGE_autocore=y
 # CONFIG_PACKAGE_luci-app-smartdns is not set
