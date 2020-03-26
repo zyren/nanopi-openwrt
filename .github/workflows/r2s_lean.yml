@@ -1,4 +1,4 @@
-#  2020-3-26 0:46 编译
+#  2020-3-27 0:07 编译
 
 name: r2s Lean版openwrt
 
@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo rm -rf /etc/apt/sources.list.d
           sudo apt-get update
-          sudo apt-get -y --no-install-recommends install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler
+          sudo apt-get -y --no-install-recommends install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3.5 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib
           curl https://raw.githubusercontent.com/friendlyarm/build-env-on-ubuntu-bionic/master/install.sh  | sed '/#/d' | sed 's/\\//g' | sed 's/exit 0//g' | sed 's/sudo apt -y install//g' | sed 's/sudo apt-get -y install//g' | sed 's/:i386//g' | xargs sudo apt-get -y --no-install-recommends install
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk
 
@@ -89,7 +89,7 @@ jobs:
           sed -i '/exit/i\find /etc/rc.d/ -name *docker* -delete' package/lean/default-settings/files/zzz-default-settings
           sed -i 's/option fullcone\t1/option fullcone\t0/' package/network/config/firewall/files/firewall.config
           sed -i '/8.8.8.8/d' package/base-files/files/root/setup.sh
-          mv ../../scripts/check_wan4.sh package/base-files/files/usr/bin && mv ../../scripts/check_wan4 package/base-files/files/etc/init.d && cd package/base-files/files/etc/rc.d && ln -s ../init.d/check_wan4 S95check_wan4 && cd ../../../../../
+          mv ../../scripts/check_wan4.sh package/base-files/files/usr/bin && sed -i '/exit/i\/bin/sh /usr/bin/check_wan4.sh &' package/base-files/files/etc/rc.local
           echo -e '\nDYC Build\n'  >> package/base-files/files/etc/banner
           
       - name: Build FriendlyWrt
