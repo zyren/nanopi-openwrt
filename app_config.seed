@@ -57,6 +57,7 @@ CONFIG_PACKAGE_luci-app-v2ray-server=y
 #CONFIG_PACKAGE_luci-app-vssr is not set
 #CONFIG_PACKAGE_luci-app-vssr_INCLUDE_Trojan is not set
 #CONFIG_PACKAGE_luci-app-vssr_INCLUDE_V2ray is not set
+CONFIG_PACKAGE_luci-app-zerotier=y
 #CONFIG_PACKAGE_luci-theme-argon is not set
 CONFIG_PACKAGE_luci-theme-material=y
 #CONFIG_PACKAGE_luci-theme-netgear is not set
