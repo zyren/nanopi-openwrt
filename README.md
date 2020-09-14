@@ -1,16 +1,4 @@
-感谢Klever1998大神制作的R2S整合固件，实测非常稳定可靠
-
-本项目Fork来源：https://github.com/klever1988/nanopi-openwrt
-
-### 发布地址：
-
-https://github.com/zyren/nanopi-openwrt/releases
-
-(请记得下载zip包之后解压出里头的固件包再刷，不要拿zip直刷，会失败的！)
-
-以下内容源自Klever1998大神的项目：https://github.com/klever1988/nanopi-openwrt
-
-## Nanopi r2s openwrt 固件自动编译
+## Nanopi r1s r2s openwrt 固件自动编译
 
 ### 发布地址：
 https://github.com/klever1988/nanopi-openwrt/releases
@@ -33,8 +21,28 @@ Lienol版默认用户名是root, 密码为空
 
 https://github.com/klever1988/nanopi-openwrt/blob/master/CHANGELOG.md
 
+### R2S在线升级方法:
+(注意:目前仅支持R2S，仅能升级到minimal版本固件，如果你使用的是Lienol版也不要用此方法升级)  
+先安装好依赖
+```bash
+opkg update
+opkg install zstd
+opkg install libzstd
+```
+然后下载脚本执行
+```bash
+wget -qO- https://github.com/klever1988/nanopi-openwrt/raw/master/scripts/autoupdate.sh | sh
+```
+(脚本由gary lau提供，非常感谢！)
 
+### R2S离线升级方法:
+(注意:目前仅支持R2S，仅能升级到minimal版本固件，如果你使用的是Lienol版也不要用此方法升级)
+把下载好的 release固件 上传到R2S（系统 -> 文件传输 -> 上传）
+把下载好的scripts目录下的 autoupdate-offline.sh 上传到R2S（系统 -> 文件传输 -> 上传）
+然后脚本执行
+```bash
+sh /tmp/upload/autoupdate-offline.sh
+```
 #### 本固件(minimal版本)NAT基准性能测试：
 
-![NAT](https://github.com/klever1988/nanopi-openwrt/raw/master/assets/NAT.jpg)
-![Acc](https://raw.githubusercontent.com/klever1988/nanopi-openwrt/master/assets/Acc.jpg)
+<img src="https://github.com/klever1988/nanopi-openwrt/raw/master/assets/NAT.jpg" width="600" /><img src="https://raw.githubusercontent.com/klever1988/nanopi-openwrt/master/assets/Acc.jpg" width="250" />

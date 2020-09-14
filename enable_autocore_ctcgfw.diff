@@ -1,5 +1,5 @@
 diff --git a/package/lean/autocore/Makefile b/package/lean/autocore/Makefile
-index c6cde396e..347a45203 100644
+index 22b986d58c..945f9a2784 100644
 --- a/package/lean/autocore/Makefile
 +++ b/package/lean/autocore/Makefile
 @@ -17,7 +17,7 @@ include $(INCLUDE_DIR)/package.mk
@@ -12,10 +12,10 @@ index c6cde396e..347a45203 100644
  
  define Package/autocore/description
 diff --git a/package/lean/autocore/files/autocore b/package/lean/autocore/files/autocore
-index 614e21761..90f9f52dd 100755
+index 436e92940a..16262fb1c6 100755
 --- a/package/lean/autocore/files/autocore
 +++ b/package/lean/autocore/files/autocore
-@@ -31,7 +31,7 @@ start()
+@@ -33,7 +33,7 @@ start()
  	g=${a}${b}${c}${d}${e}${f}
  
  	mkdir -p /tmp/sysinfo
@@ -24,7 +24,7 @@ index 614e21761..90f9f52dd 100755
  
  	a=$(ip address | grep ^[0-9] | awk -F: '{print $2}' | sed "s/ //g" | grep '^[e]' | grep -v "@" | grep -v "\.")
  	b=$(echo "$a" | wc -l)
-@@ -42,7 +42,7 @@ start()
+@@ -44,7 +44,7 @@ start()
  		ethtool -K $c tx-checksum-ip-generic on >/dev/null 2>&1 || (
  		ethtool -K $c tx-checksum-ipv4 on >/dev/null 2>&1
  		ethtool -K $c tx-checksum-ipv6 on >/dev/null 2>&1)
@@ -33,22 +33,10 @@ index 614e21761..90f9f52dd 100755
  		ethtool -K $c gso on >/dev/null 2>&1
  		ethtool -K $c tso on >/dev/null 2>&1
  		ethtool -K $c ufo on >/dev/null 2>&1
-diff --git a/package/lean/autocore/files/index.htm b/package/lean/autocore/files/index.htm
-index c24224cb3..e7da9b7a6 100644
---- a/package/lean/autocore/files/index.htm
-+++ b/package/lean/autocore/files/index.htm
-@@ -718,6 +718,7 @@
- 		<tr><td width="33%"><%:Firmware Version%></td><td>
- 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
- 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
-+			built by DYC
- 		</td></tr>
- 		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
- 		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
-diff --git a/package/lean/autocore/files/sbin/cpuinfo b/package/lean/autocore/files/sbin/cpuinfo
-index 8c0527f84..6adabeafc 100755
---- a/package/lean/autocore/files/sbin/cpuinfo
-+++ b/package/lean/autocore/files/sbin/cpuinfo
+diff --git a/package/lean/autocore/files/cpuinfo b/package/lean/autocore/files/cpuinfo
+index 8c0527f84f..6adabeafc7 100755
+--- a/package/lean/autocore/files/cpuinfo
++++ b/package/lean/autocore/files/cpuinfo
 @@ -1,5 +1,5 @@
  #!/bin/sh
  
@@ -57,3 +45,16 @@ index 8c0527f84..6adabeafc 100755
 +MHz=`echo "$(cat /sys/devices/system/cpu/cpu[04]/cpufreq/cpuinfo_cur_freq)/1000" | bc`
 +TEMP=`echo "scale=2; $(cat /sys/class/thermal/thermal_zone0/temp)/1000" | bc`°
  echo "$MHz MHz $TEMP "
+diff --git a/package/lean/autocore/files/rpcd_10_system.js b/package/lean/autocore/files/rpcd_10_system.js
+index 73638a0b6b..dda369ba5c 100644
+--- a/package/lean/autocore/files/rpcd_10_system.js
++++ b/package/lean/autocore/files/rpcd_10_system.js
+@@ -76,7 +76,7 @@ return L.Class.extend({
+ 			_('Hostname'),         boardinfo.hostname,
+ 			_('Model'),            boardinfo.model + cpubench.cpubench,
+ 			_('CPU Info'),         cpuinfo.cpuinfo,
+-			_('Firmware Version'), (L.isObject(boardinfo.release) ? boardinfo.release.description : '')/* + ' / ' : '') + (luciversion || '')*/,
++			_('Firmware Version'), (L.isObject(boardinfo.release) ? boardinfo.release.description : '') + ' built by DYC'/* + ' / ' : '') + (luciversion || '')*/,
+ 			_('Kernel Version'),   boardinfo.kernel,
+ 			_('Local Time'),       datestr,
+ 			_('Uptime'),           systeminfo.uptime ? '%t'.format(systeminfo.uptime) : null,

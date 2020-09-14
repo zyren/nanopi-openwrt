@@ -1,4 +1,4 @@
-#  2020-4-10 3:04 编译
+#  2020-9-14 3:04 编译
 
 name: r2s Lean版openwrt
 
@@ -30,30 +30,13 @@ jobs:
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo rm -rf /etc/apt/sources.list.d
-          sudo apt-get update
-          sudo apt-get -y --no-install-recommends install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3.5 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib python3-pip antlr3 gperf
-          pip3 install Django==3.0.5
-          curl https://raw.githubusercontent.com/friendlyarm/build-env-on-ubuntu-bionic/master/install.sh  | sed '/#/d' | sed 's/\\//g' | sed 's/exit 0//g' | sed 's/sudo apt -y install//g' | sed 's/sudo apt-get -y install//g' | sed 's/:i386//g' | xargs sudo apt-get -y --no-install-recommends install
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk
+        run: . 1_initialization_environment.sh
 
-      - name: Install Repo
-        run: |
-          git clone https://github.com/friendlyarm/repo
-          sudo cp repo/repo /usr/bin/
-
-      - name: Init Source
-        run: |
-          mkdir friendlywrt-rk3328
-          cd friendlywrt-rk3328
-          repo init -u https://github.com/friendlyarm/friendlywrt_manifests -b master-v19.07.1 -m rk3328.xml --repo-url=https://github.com/friendlyarm/repo --no-clone-bundle --depth=1
-          repo sync -c --no-tags --no-clone-bundle -j8
-          cd friendlywrt/ && git fetch --unshallow
+      - name: Clone Source
+        run: . 2_clone_source.sh master-v19.07.1 rk3328
 
       - name: Patch Kernel
-        run: |
-          . patch_kernel_5.4.sh
+        run: . patch_kernel_5.4.sh
 
       - name: Mods
         run: |
@@ -64,54 +47,40 @@ jobs:
           cat ../base_rk3328.seed > configs/config_rk3328
           echo '# CONFIG_V2RAY_COMPRESS_UPX is not set' >> configs/config_rk3328
           cd friendlywrt
-          git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
-          git remote add upstream https://github.com/coolsnowwolf/lede && git fetch upstream
-          git rebase adc1a9a3676b8d7be1b48b5aed185a94d8e42728^ --onto upstream/master -X theirs
-          git revert --no-edit 8faac30089ce616940b3e96c4f4d900aeb6b9fcb
-          sed -i '/ipv6/,+3d' package/base-files/files/root/setup.sh
-          git checkout upstream/master -- feeds.conf.default
+          git remote add upstream https://github.com/coolsnowwolf/openwrt && git fetch upstream
+          git checkout upstream/lede-17.01 -b tmp
+          #git checkout 33f7cb735300bd9a099995236ed768c8925fec75 -- target/linux/sunxi/image/
+          git rm README.md
+          git commit -m 'reset'
+          git checkout master-v19.07.1
+          git rebase adc1a9a3676b8d7be1b48b5aed185a94d8e42728^ --onto tmp -X theirs
+          rm -f target/linux/rockchip-rk3328/patches-4.14/0001-net-thunderx-workaround-BGX-TX-Underflow-issue.patch target/linux/generic/hack-4.14/999-net-patch-linux-kernel-to-support-shortcut-fe.patch
+          git checkout upstream/lede-17.01 -- feeds.conf.default
+          sed -i -E 's/#(src-git.+)(helloworld.+)/\1\2/' feeds.conf.default
           cd package/lean/
-          #git clone https://github.com/jerrykuku/lua-maxminddb.git
-          #git clone https://github.com/jerrykuku/luci-app-vssr.git
-          #cd luci-app-vssr/root/etc/
-          #echo 'china_ssr.txt
-          #config/black.list
-          #config/white.list
-          #dnsmasq.oversea/oversea_list.conf
-          #dnsmasq.ssr/ad.conf
-          #dnsmasq.ssr/gfw_base.conf' | xargs rm
-          #cd ../../../
+
           #rm -rf luci-theme-argon  
-          #git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
+          . ../../../../3_prepare_packages.sh
           cd ../../
           git apply ../../enable_autocore.diff
-          #git apply ../../fix_cpufreq.diff
+          sed -i 's/@LINUX_5_4//' package/lean/luci-app-flowoffload/Makefile
           sed -i '/uci commit luci/i\uci set luci.main.mediaurlbase="/luci-static/argon"' package/lean/default-settings/files/zzz-default-settings
           sed -i '/exit/i\chown -R root:root /usr/share/netdata/web' package/lean/default-settings/files/zzz-default-settings
           sed -i '/exit/i\find /etc/rc.d/ -name *docker* -delete' package/lean/default-settings/files/zzz-default-settings
           sed -i 's/option fullcone\t1/option fullcone\t0/' package/network/config/firewall/files/firewall.config
           sed -i '/8.8.8.8/d' package/base-files/files/root/setup.sh
           mv ../../scripts/check_wan4.sh package/base-files/files/usr/bin && sed -i '/exit/i\/bin/sh /usr/bin/check_wan4.sh &' package/base-files/files/etc/rc.local
-          echo -e '\nDYC Build\n'  >> package/base-files/files/etc/banner
-          
+          mv ../../scripts/autoupdate.sh package/base-files/files/root/au.sh && chmod +x package/base-files/files/root/au.sh
+          echo -e '\nDYC Build\n' >> package/base-files/files/etc/banner
+
       - name: Build FriendlyWrt
-        run: |
-          cd friendlywrt-rk3328
-          sed -i 's/set -eu/set -u/' scripts/mk-friendlywrt.sh
-          ./build.sh nanopi_r2s.mk
-      
-      - name: Zip Files
-        run: |
-          gzip friendlywrt-rk3328/out/*.img
+        run: . 4_build_image.sh friendlywrt-rk3328 nanopi_r2s.mk
+
       - name: Assemble Artifact
         id: assemble_artifact
         run: |
-          rm -rf ./artifact/
-          mkdir -p ./artifact/
-          mv friendlywrt-rk3328/out/*img* ./artifact/
-          cp friendlywrt-rk3328/friendlywrt/.config ./artifact/
-          zip -r artifact.zip ./artifact/
-          release_tag="R2S-Lean-$(date +%Y-%m-%d--%H-%M)"
+          . x_assemble_artifact.sh
+          release_tag="R2S-Lean-$(date +%Y-%m-%d)"
           echo "##[set-output name=release_tag;]$release_tag"
       - name: Create Release
         id: create_release
